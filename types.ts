@@ -8,3 +8,8 @@ export type Event = {
   created: string;
   updated: string;
 };
+
+export type Registration = {
+  name: string;
+  comment: string;
+};

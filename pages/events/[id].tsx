@@ -1,15 +1,19 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
-import { Event } from '../../types';
+import { Event, Registration } from '../../types';
 
 type IProps = {
   event: Event;
+  registrations: Registration[];
 };
 
-const EventPage: NextPage<IProps> = ({ event, registration }) => {
+const EventPage: NextPage<IProps> = ({ event, registrations }) => {
   return (
     <div>
       <h1>{event.name}</h1>
       <p>test</p>
+      {registrations.map((registration: Registration) => (
+        <>{registration.name}</>
+      ))}
     </div>
   );
 };
@@ -29,9 +33,9 @@ export const getStaticPaths: GetStaticPaths = async (context) => {
   return { paths, fallback: false };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getStaticProps: GetStaticProps = async ({ params }) => {
   const res = await fetch(
-    `http://vef2-v3-kari.herokuapp.com/events/${context.params.id}`
+    `http://vef2-v3-kari.herokuapp.com/events/${params?.id}`
   );
   const result = await res.json();
 
