@@ -1,4 +1,4 @@
-import type { GetStaticProps, NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { Event } from '../types';
 
@@ -20,7 +20,7 @@ const Home: NextPage<IProps> = ({ events }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch('http://vef2-v3-kari.herokuapp.com/events');
   const events = await res.json();
 

@@ -13,3 +13,9 @@ export type Registration = {
   name: string;
   comment: string;
 };
+
+export type User = {
+  id: number;
+  name: string;
+  username: string;
+};
