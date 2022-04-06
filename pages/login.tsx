@@ -4,8 +4,8 @@ import { useContext, useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import LoginForm from '../components/LoginForm/LoginForm';
 import { BASE_URL } from '../utils/consts';
+import { Context, IContext } from '../utils/context';
 import { LoginData, LoginError, User } from '../utils/types';
-import { Context, IContext } from './_theme';
 
 type LoginResponseData = {
   user: User;

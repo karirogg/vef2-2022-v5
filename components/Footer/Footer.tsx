@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
-import { Context } from '../../pages/_theme';
+import { Context } from '../../utils/context';
 import s from './Footer.module.scss';
 
 export default function Footer() {

@@ -2,8 +2,8 @@ import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import '../styles/globals.scss';
 import { BASE_URL } from '../utils/consts';
+import { Context } from '../utils/context';
 import { User } from '../utils/types';
-import { Context } from './_theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const [user, setUser] = useState<User | null>(null);

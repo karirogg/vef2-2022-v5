@@ -7,8 +7,8 @@ import Footer from '../../components/Footer/Footer';
 import s2 from '../../components/LoginForm/LoginForm.module.scss';
 import s from '../../styles/EventPage.module.scss';
 import { BASE_URL } from '../../utils/consts';
+import { Context, IContext } from '../../utils/context';
 import { Event, Registration } from '../../utils/types';
-import { Context, IContext } from '../_theme';
 
 type IProps = {
   event: Event;
