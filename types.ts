@@ -19,3 +19,14 @@ export type User = {
   name: string;
   username: string;
 };
+
+export type LoginData = {
+  username: string;
+  password: string;
+};
+
+export type RegisterData = {
+  username: string;
+  name: string;
+  password: string;
+};
