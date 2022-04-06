@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import LoginForm from '../components/LoginForm/LoginForm';
-import { LoginData, LoginError, User } from '../types';
+import { BASE_URL } from '../utils/consts';
+import { LoginData, LoginError, User } from '../utils/types';
 import { Context, IContext } from './_theme';
 
 type LoginResponseData = {
@@ -18,16 +19,13 @@ const LoginPage: NextPage = () => {
   const router = useRouter();
 
   async function postLogin({ username, password }: LoginData) {
-    const request = await fetch(
-      'https://vef2-v3-kari.herokuapp.com/users/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      }
-    );
+    const request = await fetch(`${BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    });
 
     if (request.ok) {
       const data = await request.json();

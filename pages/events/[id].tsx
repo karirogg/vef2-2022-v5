@@ -6,7 +6,8 @@ import Button from '../../components/Button/Button';
 import Footer from '../../components/Footer/Footer';
 import s2 from '../../components/LoginForm/LoginForm.module.scss';
 import s from '../../styles/EventPage.module.scss';
-import { Event, Registration } from '../../types';
+import { BASE_URL } from '../../utils/consts';
+import { Event, Registration } from '../../utils/types';
 import { Context, IContext } from '../_theme';
 
 type IProps = {
@@ -42,17 +43,14 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
     if (token && token !== '') {
       const data = { comment };
 
-      const registerRes = await fetch(
-        `http://vef2-v3-kari.herokuapp.com/events/${id}/register`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const registerRes = await fetch(`${BASE_URL}/events/${id}/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
 
       const result = await registerRes.json();
 
@@ -69,16 +67,13 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
 
   async function unregister() {
     const token = await localStorage.getItem('token');
-    const registerRes = await fetch(
-      `http://vef2-v3-kari.herokuapp.com/events/${id}/register`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const registerRes = await fetch(`${BASE_URL}/events/${id}/register`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     const result = await registerRes.json();
 
@@ -136,9 +131,7 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  const res = await fetch(
-    `http://vef2-v3-kari.herokuapp.com/events/${params?.id}`
-  );
+  const res = await fetch(`${BASE_URL}/events/${params?.id}`);
   const result = await res.json();
 
   return {

@@ -2,7 +2,8 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import Footer from '../components/Footer/Footer';
 import s from '../styles/Home.module.scss';
-import { Event } from '../types';
+import { BASE_URL } from '../utils/consts';
+import { Event } from '../utils/types';
 
 type IProps = {
   events: Event[];
@@ -28,7 +29,7 @@ const Home: NextPage<IProps> = ({ events }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const res = await fetch('http://vef2-v3-kari.herokuapp.com/events');
+  const res = await fetch(`${BASE_URL}/events`);
   const events = await res.json();
 
   return {

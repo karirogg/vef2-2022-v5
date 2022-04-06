@@ -1,7 +1,8 @@
 import type { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import '../styles/globals.scss';
-import { User } from '../types';
+import { BASE_URL } from '../utils/consts';
+import { User } from '../utils/types';
 import { Context } from './_theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -11,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     async function fetchUser() {
       const token = await localStorage.getItem('token');
       if (token !== '') {
-        const res = await fetch('http://vef2-v3-kari.herokuapp.com/users/me', {
+        const res = await fetch(`${BASE_URL}/users/me`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

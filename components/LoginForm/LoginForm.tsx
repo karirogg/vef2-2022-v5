@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LoginData, RegisterData } from '../../types';
+import { LoginData, RegisterData } from '../../utils/types';
 import Button from '../Button/Button';
 import s from './LoginForm.module.scss';
 
