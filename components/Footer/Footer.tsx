@@ -1,22 +1,22 @@
 import Link from 'next/link';
 import React, { useContext } from 'react';
 import { Context } from '../../pages/_theme';
-import Button from '../Button/Button';
 import s from './Footer.module.scss';
 
-type IProps = {
-  logout: () => void;
-};
+export default function Footer() {
+  const { user, setUser } = useContext(Context);
 
-export default function Footer({ logout }: IProps) {
-  const { user } = useContext(Context);
+  function logout() {
+    setUser(null);
+    localStorage.setItem('token', '');
+  }
 
   return (
     <div className={s.user}>
       {user ? (
         <React.Fragment>
           <p className={s.user__loggedIn}>Skráð/ur inn sem: {user.name}</p>
-          <Button onClick={logout}>Útskráning</Button>
+          <a onClick={logout}>Útskráning</a>
         </React.Fragment>
       ) : (
         <React.Fragment>

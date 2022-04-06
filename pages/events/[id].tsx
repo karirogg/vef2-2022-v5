@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { FormEvent, useContext, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import Button from '../../components/Button/Button';
 import Footer from '../../components/Footer/Footer';
 import s2 from '../../components/LoginForm/LoginForm.module.scss';
@@ -17,30 +17,22 @@ type IProps = {
 const EventPage: NextPage<IProps> = ({ event, registrations }) => {
   const { user }: IContext = useContext(Context);
   const [comment, setComment] = useState<string>('');
+  const [liveRegistrations, setRegistrations] =
+    useState<Registration[]>(registrations);
+  const [isRegistered, setIsRegistered] = useState<boolean>(false);
   const router = useRouter();
   const { id } = router.query;
 
-  /*useEffect(() => {
-    const fetchLoggedIn = async () => {
-      const token = await localStorage.getItem('token');
-
-      if (token && token !== '') {
-        const loggedInRes = await fetch(
-          'http://vef2-v3-kari/herokuapp.com/users/me',
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const loggedInResult = await loggedInRes.json();
-        if (!loggedInResult) localStorage.setItem('token', '');
-      }
-    };
-    fetchLoggedIn();
-  }, []);*/
+  useEffect(() => {
+    if (user) {
+      console.log(user.id);
+      console.log(registrations);
+      const userRegistrations = registrations.filter(
+        (registration) => registration.id === user.id
+      );
+      if (userRegistrations.length > 0) setIsRegistered(true);
+    }
+  }, [user, registrations]);
 
   async function registerUser(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -63,6 +55,39 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
       );
 
       const result = await registerRes.json();
+
+      if (result && user) {
+        setRegistrations([
+          ...liveRegistrations,
+          { id: user.id, name: user.name, comment: comment },
+        ]);
+        setIsRegistered(true);
+        setComment('');
+      }
+    }
+  }
+
+  async function unregister() {
+    const token = await localStorage.getItem('token');
+    const registerRes = await fetch(
+      `http://vef2-v3-kari.herokuapp.com/events/${id}/register`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const result = await registerRes.json();
+
+    if (result && user) {
+      const newRegistration = liveRegistrations.filter(
+        (registration) => registration.id !== user.id
+      );
+      setRegistrations(newRegistration);
+      setIsRegistered(false);
     }
   }
 
@@ -75,7 +100,7 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
       <section>
         <h2>Skráningar</h2>
         <ul className={s.event__registered}>
-          {registrations.map((registration: Registration) => (
+          {liveRegistrations.map((registration: Registration) => (
             <li className={s.registered__item} key={registration.name}>
               <p className={s.event__registeredName}>{registration.name}</p>
               <p className={s.event__registeredComment}>
@@ -85,23 +110,27 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
           ))}
         </ul>
       </section>
-      {true && (
+      {user && (
         <section>
           <h2>Skrá á viðburð</h2>
-          <form className={s2.form} onSubmit={registerUser}>
-            <div className={s2.field}>
-              <input
-                type="text"
-                value={comment}
-                onChange={(e) => setComment(e.target.value)}
-              />
-            </div>
-            <Button>Skrá á viðburð</Button>
-          </form>
+          {!isRegistered ? (
+            <form className={s2.form} onSubmit={registerUser}>
+              <div className={s2.field}>
+                <input
+                  type="text"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+              <Button>Skrá á viðburð</Button>
+            </form>
+          ) : (
+            <Button onClick={unregister}>Afskrá</Button>
+          )}
         </section>
       )}
       <Link href="/">Til baka</Link>
-      <Footer logout={() => {}} />
+      <Footer />
     </div>
   );
 };

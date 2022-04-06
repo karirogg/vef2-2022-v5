@@ -1,12 +1,45 @@
 import type { AppProps } from 'next/app';
+import { useEffect, useState } from 'react';
 import '../styles/globals.scss';
-import ThemeProvider from './_theme';
+import { User } from '../types';
+import { Context } from './_theme';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    async function fetchUser() {
+      const token = await localStorage.getItem('token');
+      if (token !== '') {
+        const res = await fetch('http://vef2-v3-kari.herokuapp.com/users/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const result = await res.json();
+        try {
+          const { id, username, name, admin } = result;
+          setUser({ id, username, name, admin });
+        } catch {
+          await localStorage.setItem('token', '');
+          setUser(null);
+        }
+      }
+    }
+
+    fetchUser();
+  }, []);
+
   return (
-    <ThemeProvider>
+    <Context.Provider
+      value={{
+        user,
+        setUser,
+      }}
+    >
       <Component {...pageProps} />
-    </ThemeProvider>
+    </Context.Provider>
   );
 }
 

@@ -22,7 +22,7 @@ const Home: NextPage<IProps> = ({ events }) => {
           </li>
         ))}
       </ul>
-      <Footer logout={() => {}} />
+      <Footer />
     </div>
   );
 };

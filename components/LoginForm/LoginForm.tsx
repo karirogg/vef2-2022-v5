@@ -3,18 +3,36 @@ import { LoginData, RegisterData } from '../../types';
 import Button from '../Button/Button';
 import s from './LoginForm.module.scss';
 
-type IProps = {
-  onPost: (data: LoginData | RegisterData) => void;
-};
+type IProps =
+  | (
+      | {
+          login: true;
+          onPost: (data: LoginData) => void;
+        }
+      | {
+          login: false;
+          onPost: (data: RegisterData) => void;
+        }
+    ) & { errors: string[] };
 
-export default function LoginForm({ onPost }: IProps) {
+export default function LoginForm({ errors, login, onPost }: IProps) {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [name, setName] = useState<string>('');
 
   return (
     <div>
-      <h1>Innskráning</h1>
       <form className={s.form} onSubmit={(e) => e.preventDefault()}>
+        {!login && (
+          <div className={s.field}>
+            <label>Nafn:</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+        )}
         <div className={s.field}>
           <label>Notandanafn:</label>
           <input
@@ -31,7 +49,16 @@ export default function LoginForm({ onPost }: IProps) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <Button onClick={() => onPost({ username, password })}>Skrá inn</Button>
+        <div className={s.errors}>
+          {errors.map((e: string, i) => (
+            <p className={s.errors__title} key={i}>
+              {e}
+            </p>
+          ))}
+        </div>
+        <Button onClick={() => onPost({ username, password, name })}>
+          {login ? 'Skrá inn' : 'Nýskrá'}
+        </Button>
       </form>
     </div>
   );

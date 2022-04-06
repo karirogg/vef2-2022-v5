@@ -10,6 +10,7 @@ export type Event = {
 };
 
 export type Registration = {
+  id: number;
   name: string;
   comment: string;
 };
@@ -18,6 +19,7 @@ export type User = {
   id: number;
   name: string;
   username: string;
+  admin: boolean;
 };
 
 export type LoginData = {
@@ -29,4 +31,11 @@ export type RegisterData = {
   username: string;
   name: string;
   password: string;
+};
+
+export type LoginError = {
+  value: string;
+  msg: string;
+  param: string;
+  location: string;
 };
