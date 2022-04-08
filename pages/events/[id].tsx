@@ -134,6 +134,13 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await fetch(`${BASE_URL}/events/${params?.id}`);
   const result = await res.json();
 
+  if (!result.ok) {
+    return {
+      notFound: true,
+      props: {},
+    };
+  }
+
   return {
     props: {
       event: result.event,
