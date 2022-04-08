@@ -132,14 +132,15 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   const res = await fetch(`${BASE_URL}/events/${params?.id}`);
-  const result = await res.json();
 
-  if (!result.ok) {
+  if (!res.ok) {
     return {
       notFound: true,
       props: {},
     };
   }
+
+  const result = await res.json();
 
   return {
     props: {
