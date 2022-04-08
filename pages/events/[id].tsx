@@ -16,11 +16,14 @@ type IProps = {
 };
 
 const EventPage: NextPage<IProps> = ({ event, registrations }) => {
-  const { user }: IContext = useContext(Context);
+  const { user, setUser }: IContext = useContext(Context);
+
   const [comment, setComment] = useState<string>('');
   const [liveRegistrations, setRegistrations] =
     useState<Registration[]>(registrations);
+  const [errors, setErrors] = useState<string[]>([]);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
+
   const router = useRouter();
   const { id } = router.query;
 
@@ -61,6 +64,12 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
         ]);
         setIsRegistered(true);
         setComment('');
+      } else {
+        setErrors([
+          'Villa kom upp við skráningu á viðburð. Vinsamlegast skráðu þig aftur inn',
+        ]);
+        setUser(null);
+        await localStorage.setItem('token', '');
       }
     }
   }
@@ -83,6 +92,12 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
       );
       setRegistrations(newRegistration);
       setIsRegistered(false);
+    } else {
+      setErrors([
+        'Villa kom upp við afskráningu á viðburð. Vinsamlegast skráðu þig aftur inn',
+      ]);
+      setUser(null);
+      await localStorage.setItem('token', '');
     }
   }
 
@@ -124,6 +139,9 @@ const EventPage: NextPage<IProps> = ({ event, registrations }) => {
           )}
         </section>
       )}
+      {errors.map((error, i) => (
+        <p key={i}>{error}</p>
+      ))}
       <Link href="/">Til baka</Link>
       <Footer />
     </div>
