@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext, useState } from 'react';
 import Footer from '../components/Footer/Footer';
@@ -45,6 +46,7 @@ const LoginPage: NextPage = () => {
     <div className="main">
       <h1>Innskráning</h1>
       <LoginForm login={true} errors={errors} onPost={postLogin} />
+      <Link href="/">Á forsíðu</Link>
       <Footer />
     </div>
   );

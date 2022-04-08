@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import Footer from '../components/Footer/Footer';
@@ -39,6 +40,7 @@ const LoginPage: NextPage = () => {
       ) : (
         <p>Notandi {user.name} var búinn til. Skráðu þig inn að neðan.</p>
       )}
+      <Link href="/">Á forsíðu</Link>
       <Footer />
     </div>
   );
