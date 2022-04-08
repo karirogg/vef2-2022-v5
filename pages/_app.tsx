@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     async function fetchUser() {
       const token = await localStorage.getItem('token');
+
       if (token !== '') {
         const res = await fetch(`${BASE_URL}/users/me`, {
           headers: {
@@ -24,8 +25,8 @@ function MyApp({ Component, pageProps }: AppProps) {
           const { id, username, name, admin } = result;
           setUser({ id, username, name, admin });
         } else {
-          await localStorage.setItem('token', '');
           setUser(null);
+          await localStorage.setItem('token', '');
         }
       }
     }
