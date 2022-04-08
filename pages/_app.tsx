@@ -18,15 +18,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           },
         });
 
-        if (!res.ok) {
+        if (res.ok) {
+          const result = await res.json();
+
+          const { id, username, name, admin } = result;
+          setUser({ id, username, name, admin });
+        } else {
           await localStorage.setItem('token', '');
           setUser(null);
         }
-
-        const result = await res.json();
-
-        const { id, username, name, admin } = result;
-        setUser({ id, username, name, admin });
       }
     }
 
